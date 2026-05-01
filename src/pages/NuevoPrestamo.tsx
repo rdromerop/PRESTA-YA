@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { User, MapPin, Phone, DollarSign, Percent, Calendar, CheckCircle2, Info } from 'lucide-react';
 import './NuevoPrestamo.css';
 
@@ -13,7 +13,7 @@ const NuevoPrestamo = () => {
     cuotas: '40'
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
     if (name === 'plazo') {
@@ -81,7 +81,7 @@ const NuevoPrestamo = () => {
     }
   }, [formData.monto, formData.interes, formData.cuotas, formData.plazo]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Datos del préstamo:', formData);
     alert('Préstamo registrado simulado con éxito');
@@ -281,7 +281,7 @@ const NuevoPrestamo = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {resumen.tabla.map((row, i) => (
+                        {resumen.tabla?.map((row, i) => (
                           <tr key={i} style={{ borderBottom: '1px solid var(--border)', color: i % 2 === 0 ? 'var(--text-main)' : 'var(--text-muted)' }}>
                             <td style={{ padding: '0.5rem', textAlign: 'center', fontWeight: 600 }}>{row.num}</td>
                             <td style={{ padding: '0.5rem', textAlign: 'right' }}>${row.abono.toFixed(2)}</td>
@@ -298,7 +298,7 @@ const NuevoPrestamo = () => {
                 // Cuota plana (diaria/semanal/quincenal)
                 <div style={{ textAlign: 'center', backgroundColor: 'var(--primary-light)', borderRadius: 'var(--radius)', padding: '0.8rem' }}>
                   <p style={{ color: '#fff', fontWeight: 700, fontSize: '1.1rem' }}>
-                    Cuota {formData.plazo}: ${resumen.valorCuota.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} × {formData.cuotas} cuotas
+                    Cuota {formData.plazo}: ${resumen.valorCuota?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} × {formData.cuotas} cuotas
                   </p>
                 </div>
               )}

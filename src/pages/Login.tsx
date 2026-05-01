@@ -10,7 +10,7 @@ const Login = () => {
   const { login } = useData();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (username === 'admin' && password === 'admin') {
       login('admin');

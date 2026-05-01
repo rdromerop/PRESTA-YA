@@ -10,18 +10,24 @@ const SUGGESTED = [
   '¿Qué cuotas vencen hoy?',
 ];
 
+interface Message {
+  id: number;
+  type: 'bot' | 'user';
+  text: string;
+}
+
 const Asistente = () => {
   const { loansDb } = useData();
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [started, setStarted] = useState(false);
-  const chatEndRef = useRef(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const processBotResponse = (userInput) => {
+  const processBotResponse = (userInput: string): string => {
     const text = userInput.toLowerCase();
     const today = new Date().toISOString().split('T')[0];
 
@@ -32,7 +38,7 @@ const Asistente = () => {
     }
 
     if (text.includes('atrasado') || text.includes('mora') || text.includes('vencido') || text.includes('deben')) {
-      let atrasados = [];
+      let atrasados: string[] = [];
       loansDb.forEach(client => {
         const schedule = calculateSchedule(client);
         const cuotasAtrasadas = schedule.filter(s => s.estado === 'Atrasado');
@@ -46,13 +52,13 @@ const Asistente = () => {
     }
 
     if (text.includes('hoy') || text.includes('próximo') || text.includes('proximo') || text.includes('vence')) {
-      const proximos = [];
+      const proximos: string[] = [];
       loansDb.forEach(client => {
         const schedule = calculateSchedule(client);
         const pendientes = schedule.filter(s => s.estado === 'Pendiente');
         if (pendientes.length > 0) {
           const next = pendientes[0];
-          const diffDays = Math.ceil((new Date(next.fecha) - new Date(today)) / (1000 * 60 * 60 * 24));
+          const diffDays = Math.ceil((new Date(next.fecha).getTime() - new Date(today).getTime()) / (1000 * 60 * 60 * 24));
           if (diffDays <= 3) {
             const label = diffDays === 0 ? '⚡ HOY' : diffDays < 0 ? `⚠️ hace ${Math.abs(diffDays)} día(s)` : `📅 en ${diffDays} día(s)`;
             proximos.push(`${client.cliente} — $${next.monto.toFixed(2)} · ${label}`);
@@ -127,10 +133,10 @@ const Asistente = () => {
     return '🤔 No entendí esa pregunta. Escribe **"ayuda"** para ver lo que puedo hacer.';
   };
 
-  const sendMessage = (text) => {
+  const sendMessage = (text: string) => {
     if (!text.trim()) return;
     setStarted(true);
-    const userMsg = { id: Date.now(), type: 'user', text };
+    const userMsg: Message = { id: Date.now(), type: 'user', text };
     setMessages(prev => [...prev, userMsg]);
     setInputValue('');
     setTimeout(() => {
@@ -142,14 +148,14 @@ const Asistente = () => {
     }, 600);
   };
 
-  const handleSend = (e) => {
+  const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     sendMessage(inputValue);
   };
 
-  const formatText = (text) => {
-    return text.split('\n').map((line, i) => {
-      const parts = line.split(/(\*\*.*?\*\*)/g).map((part, j) => {
+  const formatText = (text: string) => {
+    return text.split('\n').map((line: string, i: number) => {
+      const parts = line.split(/(\*\*.*?\*\*)/g).map((part: string, j: number) => {
         if (part.startsWith('**') && part.endsWith('**'))
           return <strong key={j}>{part.slice(2, -2)}</strong>;
         return part;

@@ -1,24 +1,25 @@
 import { useState } from 'react';
-import { Search, User, CreditCard, Phone, Calendar, Clock, DollarSign, FileText, MessageCircle } from 'lucide-react';
+import { Search, User, CreditCard, Phone, Clock, DollarSign, FileText, MessageCircle } from 'lucide-react';
 import { useData, calculateSchedule } from '../context/DataContext';
+import { Cliente, ScheduleItem } from '../types';
 import './Clientes.css';
 
 const Clientes = () => {
   const { loansDb } = useData();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClientId, setSelectedClientId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
 
-  const filteredClients = loansDb.filter(client => 
+  const filteredClients = loansDb.filter((client: Cliente) => 
     client.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
     client.cedula.includes(searchTerm)
   );
 
-  const selectedClientRaw = loansDb.find(c => c.id === selectedClientId);
+  const selectedClientRaw = loansDb.find((c: Cliente) => c.id === selectedClientId);
   
   // Computed state for the selected client
-  let selectedClient = null;
+  let selectedClient: any = null;
   if (selectedClientRaw) {
-    const schedule = calculateSchedule(selectedClientRaw);
+    const schedule: ScheduleItem[] = calculateSchedule(selectedClientRaw);
     const pagosSum = selectedClientRaw.pagos_realizados.reduce((acc, curr) => acc + curr.monto, 0);
     const montoTotal = selectedClientRaw.prestamo.monto * (1 + selectedClientRaw.prestamo.interes / 100);
     
@@ -34,7 +35,7 @@ const Clientes = () => {
     if (nextQuota) {
       const today = new Date();
       const quotaDate = new Date(nextQuota.fecha + 'T00:00:00'); // ensure local timezone comparison
-      const diffTime = quotaDate - today;
+      const diffTime = quotaDate.getTime() - today.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
       
       if (diffDays <= 3) {
@@ -55,7 +56,7 @@ const Clientes = () => {
         saldo_pendiente: montoTotal - pagosSum,
         estado: estadoPrestamo
       },
-      pagos: selectedClientRaw.pagos_realizados.map((p, i) => ({
+      pagos: selectedClientRaw.pagos_realizados.map((p: any) => ({
         id: p.id,
         fecha: p.fecha,
         monto: p.monto,
@@ -93,7 +94,7 @@ const Clientes = () => {
                 <div 
                   key={client.id} 
                   className={`client-item ${selectedClientId === client.id ? 'active' : ''}`}
-                  onClick={() => setSelectedClientId(client.id)}
+                  onClick={() => setSelectedClientId(String(client.id))}
                 >
                   <div className="client-avatar">
                     <User size={20} />
@@ -163,14 +164,14 @@ const Clientes = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedClient.pagos.map(pago => (
+                      {selectedClient.pagos_realizados.map((pago: any) => (
                         <tr key={pago.id}>
                           <td>#{pago.id}</td>
                           <td>{pago.fecha}</td>
                           <td>${pago.monto.toFixed(2)}</td>
                           <td>
-                            <span className={`payment-status payment-${pago.estado.toLowerCase()}`}>
-                              {pago.estado}
+                            <span className="payment-status payment-pagado">
+                              Pagado
                             </span>
                           </td>
                         </tr>

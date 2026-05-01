@@ -13,7 +13,7 @@ const Layout = () => {
     <div className="layout-container">
       <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       <div className={`main-content ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-        <Topbar toggleSidebar={toggleSidebar} />
+        <Topbar />
         <main className="content-area">
           <Outlet />
         </main>

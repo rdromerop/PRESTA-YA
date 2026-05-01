@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Search, DollarSign, X } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import './CobradorDashboard.css';
@@ -6,23 +6,23 @@ import './CobradorDashboard.css';
 const CobradorDashboard = () => {
   const { loansDb, registerPayment } = useData();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedClient, setSelectedClient] = useState<any>(null);
   const [amount, setAmount] = useState('');
 
   const filteredClients = loansDb.filter(c => 
     c.cliente.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleOpenPayment = (client) => {
+  const handleOpenPayment = (client: any) => {
     setSelectedClient(client);
     setAmount('');
   };
 
-  const handleSubmitPayment = (e) => {
+  const handleSubmitPayment = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || isNaN(amount) || amount <= 0) return;
+    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) return;
     
-    registerPayment(selectedClient.id, amount);
+    registerPayment(selectedClient.id, Number(amount));
     alert(`Pago de $${amount} registrado a ${selectedClient.cliente}`);
     setSelectedClient(null);
   };

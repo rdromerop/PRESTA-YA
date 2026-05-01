@@ -2,22 +2,23 @@ import { useState, useMemo } from 'react';
 import { Search, Star, X, Download } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { useData } from '../context/DataContext';
+import { Cliente, ScheduleItem } from '../types';
 import './Pagos.css';
 
 // Helper to add time to a date
-const addTime = (dateStr, amount, unit) => {
+const addTime = (dateStr: string, amount: number, unit: 'dias' | 'meses'): string => {
   const d = new Date(dateStr);
   if (unit === 'dias') d.setDate(d.getDate() + amount);
   if (unit === 'meses') d.setMonth(d.getMonth() + amount);
   return d.toISOString().split('T')[0];
 };
 
-const calculateSchedule = (loanData) => {
+const calculateSchedule = (loanData: Cliente): ScheduleItem[] => {
   const { prestamo, pagos_realizados } = loanData;
   const montoTotal = prestamo.monto * (1 + prestamo.interes / 100);
   const montoPorCuota = montoTotal / prestamo.cuotas_totales;
   
-  let schedule = [];
+  let schedule: ScheduleItem[] = [];
   let currentDate = prestamo.fecha_inicio;
   const today = new Date().toISOString().split('T')[0];
 
@@ -29,7 +30,7 @@ const calculateSchedule = (loanData) => {
     else if (prestamo.plazo === 'mensual') currentDate = addTime(currentDate, 1, 'meses');
 
     const isPaid = i <= pagos_realizados.length;
-    let estado = isPaid ? 'Pagado' : 'Pendiente';
+    let estado: ScheduleItem['estado'] = isPaid ? 'Pagado' : 'Pendiente';
     
     if (!isPaid && currentDate < today) {
       estado = 'Atrasado';
@@ -45,7 +46,7 @@ const calculateSchedule = (loanData) => {
   return schedule;
 };
 
-const getRatingDetails = (rating) => {
+const getRatingDetails = (rating: number) => {
   if (rating <= 1) return { cls: 'rating-1', label: 'Cliente malo' };
   if (rating <= 2) return { cls: 'rating-2', label: 'Alto riesgo' };
   if (rating <= 3) return { cls: 'rating-3', label: 'Poco potencial' };
@@ -53,7 +54,7 @@ const getRatingDetails = (rating) => {
   return { cls: 'rating-5', label: 'Cliente estupendo' };
 };
 
-const StarRating = ({ rating }) => {
+const StarRating = ({ rating }: { rating: number }) => {
   const { cls, label } = getRatingDetails(rating);
   return (
     <div className={`rating-container ${cls}`}>
@@ -70,11 +71,11 @@ const StarRating = ({ rating }) => {
 const Pagos = () => {
   const { loansDb } = useData();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedClient, setSelectedClient] = useState<any>(null);
 
   // Flatten payments to show in the main ledger
   const recentPayments = useMemo(() => {
-    let payments = [];
+    let payments: any[] = [];
     loansDb.forEach(client => {
       const schedule = calculateSchedule(client);
       // Solo tomamos los pagados para la tabla principal
@@ -91,18 +92,21 @@ const Pagos = () => {
       });
     });
     // Sort by descending date
-    return payments.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    return payments.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
   }, [loansDb]);
 
   const filteredPagos = recentPayments.filter(pago => 
     pago.cliente.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleRowClick = (clienteId) => {
+  const handleRowClick = (clienteId: number | string) => {
     const client = loansDb.find(c => c.id === clienteId);
     if (client) {
-      client.schedule = calculateSchedule(client);
-      setSelectedClient(client);
+      const clientWithSchedule = {
+        ...client,
+        schedule: calculateSchedule(client)
+      };
+      setSelectedClient(clientWithSchedule);
     }
   };
 
@@ -161,7 +165,7 @@ const Pagos = () => {
                   <tr key={pago.id} onClick={() => handleRowClick(pago.cliente_id)}>
                     <td className="client-name">{pago.cliente}</td>
                     <td>
-                      <StarRating rating={pago.calificacion} />
+                      <StarRating rating={Number(pago.calificacion)} />
                     </td>
                     <td>{pago.fecha}</td>
                     <td className="amount">${pago.monto.toFixed(2)}</td>
@@ -169,7 +173,7 @@ const Pagos = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" style={{textAlign: 'center', color: 'var(--text-muted)', padding: '3rem'}}>
+                  <td colSpan={4} style={{textAlign: 'center', color: 'var(--text-muted)', padding: '3rem'}}>
                     No se encontraron pagos para ese cliente.
                   </td>
                 </tr>
@@ -211,7 +215,7 @@ const Pagos = () => {
 
               <h3 style={{marginBottom: '1rem', fontSize: '1.2rem'}}>Cronograma de Cuotas</h3>
               <div className="schedule-list">
-                {selectedClient.schedule.map((cuota) => (
+                {selectedClient.schedule.map((cuota: ScheduleItem) => (
                   <div key={cuota.cuota} className={`schedule-item ${cuota.estado.toLowerCase()}`}>
                     <div className="schedule-info">
                       <span className="cuota-number">Cuota {cuota.cuota} de {selectedClient.prestamo.cuotas_totales}</span>

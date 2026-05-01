@@ -11,7 +11,12 @@ import {
 } from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+interface SidebarProps {
+  isOpen: boolean;
+  toggleSidebar: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const menuItems = [
     { path: '/admin', name: 'Resumen', icon: LayoutDashboard },
     { path: '/admin/clientes', name: 'Clientes', icon: Users },

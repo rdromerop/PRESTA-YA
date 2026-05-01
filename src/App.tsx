@@ -13,12 +13,18 @@ import Asistente from './pages/Asistente';
 import CobradorLayout from './layouts/CobradorLayout';
 import CobradorDashboard from './pages/CobradorDashboard';
 
-const ProtectedRoute = ({ children, allowedRole }) => {
+// @ts-ignore
+const ProtectedRoute = ({ children, allowedRole }: { children: React.ReactNode, allowedRole: 'admin' | 'cobrador' }) => {
   const { currentUser } = useData();
-  if (!currentUser) return <Navigate to="/login" replace />;
-  if (allowedRole && currentUser.role !== allowedRole) {
+  
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (currentUser.role !== allowedRole) {
     return <Navigate to={currentUser.role === 'admin' ? '/admin' : '/cobrador'} replace />;
   }
+  
   return children;
 };
 

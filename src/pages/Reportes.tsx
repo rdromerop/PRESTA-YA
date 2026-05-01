@@ -29,7 +29,7 @@ const dataColocacion = [
 const PIE_COLORS = ['#41b371', '#e67e22', '#d64a4a'];
 
 // Custom Tooltip component for better aesthetics in Dark Theme
-const CustomTooltip = ({ active, payload, label, prefix = '$' }) => {
+const CustomTooltip = ({ active, payload, label, prefix = '$' }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
@@ -45,7 +45,7 @@ const Reportes = () => {
   const { loansDb } = useData();
 
   const dataRecaudacion = useMemo(() => {
-    const map = {};
+    const map: Record<string, number> = {};
     loansDb.forEach(client => {
       client.pagos_realizados.forEach(pago => {
         map[pago.fecha] = (map[pago.fecha] || 0) + pago.monto;
@@ -111,7 +111,7 @@ const Reportes = () => {
                   tickLine={false}
                   tickFormatter={(val) => `$${val}`}
                 />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip />} cursor={false} />
                 <Line 
                   type="monotone" 
                   dataKey="recogido" 
@@ -143,7 +143,7 @@ const Reportes = () => {
                   dataKey="value"
                   stroke="none"
                 >
-                  {dataCartera.map((entry, index) => (
+                  {dataCartera.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                   ))}
                 </Pie>
@@ -187,7 +187,7 @@ const Reportes = () => {
                   tickMargin={10}
                   tickFormatter={(val) => `$${val/1000}k`}
                 />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip />} cursor={{fill: 'transparent'}} />
                 <Bar dataKey="otorgado" fill="#2d5d45" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>

@@ -1,16 +1,18 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, ReactNode } from 'react';
+import { Cliente, DataContextType, ScheduleItem, Usuario } from '../types';
 
-const DataContext = createContext();
+// @ts-ignore
+const DataContext = createContext<DataContextType>();
 
 export const useData = () => useContext(DataContext);
 
-const INITIAL_DB = [
+const INITIAL_DB: Cliente[] = [
   { 
     id: 1, 
     cliente: 'Juan Pérez', 
     cedula: '123456789',
     telefono: '555-0101',
-    calificacion: 5,  // ★★★★★ ESTUPENDO
+    calificacion: 5,
     prestamo: { monto: 5000, interes: 15, cuotas_totales: 6, plazo: 'mensual', fecha_inicio: '2024-01-01' },
     pagos_realizados: [
       { id: '1-1', fecha: '2024-02-01', monto: 958.33 }
@@ -21,7 +23,7 @@ const INITIAL_DB = [
     cliente: 'María Gómez', 
     cedula: '987654321',
     telefono: '555-0202',
-    calificacion: 2,  // ★★ ALTO RIESGO
+    calificacion: 2,
     prestamo: { monto: 2000, interes: 20, cuotas_totales: 8, plazo: 'quincenal', fecha_inicio: '2024-01-01' },
     pagos_realizados: [
       { id: '2-1', fecha: '2024-01-16', monto: 300.00 }
@@ -32,7 +34,7 @@ const INITIAL_DB = [
     cliente: 'Carlos Ruiz', 
     cedula: '456123789',
     telefono: '555-0303',
-    calificacion: 4,  // ★★★★ BUEN CLIENTE
+    calificacion: 4,
     prestamo: { monto: 1500, interes: 10, cuotas_totales: 10, plazo: 'semanal', fecha_inicio: '2024-01-01' },
     pagos_realizados: [
       { id: '3-1', fecha: '2024-01-08', monto: 165.00 }
@@ -43,7 +45,7 @@ const INITIAL_DB = [
     cliente: 'Roberto Díaz',
     cedula: '321654987',
     telefono: '555-0404',
-    calificacion: 1,  // ★ CLIENTE MALO – TENEBROSO
+    calificacion: 1,
     prestamo: { monto: 800, interes: 20, cuotas_totales: 40, plazo: 'diaria', fecha_inicio: '2024-01-01' },
     pagos_realizados: [
       { id: '4-1', fecha: '2024-01-02', monto: 24.00 }
@@ -54,7 +56,7 @@ const INITIAL_DB = [
     cliente: 'Ana Torres',
     cedula: '654987321',
     telefono: '555-0505',
-    calificacion: 3,  // ★★★ POCO POTENCIAL
+    calificacion: 3,
     prestamo: { monto: 3000, interes: 20, cuotas_totales: 6, plazo: 'semanal', fecha_inicio: '2024-01-01' },
     pagos_realizados: [
       { id: '5-1', fecha: '2024-01-08', monto: 600.00 }
@@ -62,20 +64,19 @@ const INITIAL_DB = [
   },
 ];
 
-// Helper to add time to a date
-const addTime = (dateStr, amount, unit) => {
+const addTime = (dateStr: string, amount: number, unit: 'dias' | 'meses'): string => {
   const d = new Date(dateStr);
   if (unit === 'dias') d.setDate(d.getDate() + amount);
   if (unit === 'meses') d.setMonth(d.getMonth() + amount);
   return d.toISOString().split('T')[0];
 };
 
-export const calculateSchedule = (loanData) => {
+export const calculateSchedule = (loanData: Cliente): ScheduleItem[] => {
   const { prestamo, pagos_realizados } = loanData;
   const montoTotal = prestamo.monto * (1 + prestamo.interes / 100);
   const montoPorCuota = montoTotal / prestamo.cuotas_totales;
   
-  let schedule = [];
+  let schedule: ScheduleItem[] = [];
   let currentDate = prestamo.fecha_inicio;
   const today = new Date().toISOString().split('T')[0];
 
@@ -86,7 +87,7 @@ export const calculateSchedule = (loanData) => {
     else if (prestamo.plazo === 'mensual') currentDate = addTime(currentDate, 1, 'meses');
 
     const isPaid = i <= pagos_realizados.length;
-    let estado = isPaid ? 'Pagado' : 'Pendiente';
+    let estado: ScheduleItem['estado'] = isPaid ? 'Pagado' : 'Pendiente';
     
     if (!isPaid && currentDate < today) {
       estado = 'Atrasado';
@@ -102,12 +103,11 @@ export const calculateSchedule = (loanData) => {
   return schedule;
 };
 
-export const DataProvider = ({ children }) => {
-  const [loansDb, setLoansDb] = useState(INITIAL_DB);
-  const [currentUser, setCurrentUser] = useState(null); // { role: 'admin' | 'cobrador' }
+export const DataProvider = ({ children }: { children: ReactNode }) => {
+  const [loansDb, setLoansDb] = useState<Cliente[]>(INITIAL_DB);
+  const [currentUser, setCurrentUser] = useState<Usuario | null>(null);
 
-  // Auth functions
-  const login = (role) => {
+  const login = (role: 'admin' | 'cobrador') => {
     setCurrentUser({ role });
   };
 
@@ -115,15 +115,14 @@ export const DataProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
-  // Payment function
-  const registerPayment = (clienteId, amount) => {
+  const registerPayment = (clienteId: number | string, amount: number | string) => {
     setLoansDb(prevDb => prevDb.map(client => {
       if (client.id === clienteId) {
         const today = new Date().toISOString().split('T')[0];
         const newPayment = {
           id: `${client.id}-${Date.now()}`,
           fecha: today,
-          monto: parseFloat(amount)
+          monto: typeof amount === 'string' ? parseFloat(amount) : amount
         };
         return {
           ...client,

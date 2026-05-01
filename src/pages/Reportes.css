@@ -1,0 +1,88 @@
+.reportes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.page-header {
+  margin-bottom: 0.5rem;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chart-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make the first chart (Line chart) span full width if desired, or keep 50/50. 
+   Let's make the Line chart span full width, and the other two side-by-side */
+.chart-full-width {
+  grid-column: 1 / -1;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.chart-header h3 {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chart-header .icon {
+  color: var(--primary-light);
+}
+
+.chart-wrapper {
+  flex: 1;
+  min-height: 300px;
+  width: 100%;
+}
+
+/* Custom Tooltip Styling for Recharts */
+.custom-tooltip {
+  background-color: var(--bg-card-hover);
+  border: 1px solid var(--primary-light);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+.custom-tooltip .label {
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.custom-tooltip .value {
+  color: var(--accent-light);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}

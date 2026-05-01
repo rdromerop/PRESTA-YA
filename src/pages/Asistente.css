@@ -1,0 +1,225 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* ── Pantalla de presentación ── */
+.bot-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 2rem;
+  height: 100%;
+  animation: fadeIn 0.5s ease;
+}
+
+.bot-welcome-avatar {
+  position: relative;
+  background: linear-gradient(135deg, #2d5d45, #41b371);
+  color: #fff;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(65, 179, 113, 0.4);
+  margin-bottom: 0.5rem;
+}
+
+.sparkle-icon {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  color: #f0b429;
+  animation: shimmer-star 2s ease-in-out infinite alternate;
+}
+
+.bot-welcome h2 {
+  font-size: 1.6rem;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.bot-welcome > p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  max-width: 380px;
+}
+
+.bot-capabilities {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0.5rem 0;
+}
+
+.cap-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(65, 179, 113, 0.1);
+  border: 1px solid rgba(65, 179, 113, 0.3);
+  color: var(--primary-light);
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.suggested-label {
+  font-size: 0.85rem !important;
+  color: var(--text-muted) !important;
+  margin-top: 0.5rem;
+}
+
+.suggested-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  max-width: 500px;
+}
+
+.suggested-btn {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: all 0.2s;
+}
+
+.suggested-btn:hover {
+  border-color: var(--primary-light);
+  color: var(--primary-light);
+  background-color: rgba(65, 179, 113, 0.08);
+}
+
+
+
+.chat-header {
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bot-avatar {
+  background-color: var(--primary-light);
+  color: #fff;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-header-info h2 {
+  font-size: 1.2rem;
+  color: var(--text-main);
+  margin-bottom: 0.2rem;
+}
+
+.chat-header-info p {
+  font-size: 0.85rem;
+  color: var(--primary-light);
+}
+
+.chat-history {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chat-message {
+  max-width: 75%;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.chat-message p {
+  margin: 0;
+}
+
+.chat-message ul {
+  margin: 0.5rem 0 0 1.2rem;
+  padding: 0;
+}
+
+.chat-message.bot {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  align-self: flex-start;
+  border-bottom-left-radius: 0;
+}
+
+.chat-message.user {
+  background-color: #2d5d45;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 0;
+}
+
+.chat-input-area {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 1rem;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.chat-input-area input {
+  flex: 1;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 1rem 1.2rem;
+  border-radius: 20px;
+  outline: none;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.chat-input-area input:focus {
+  border-color: var(--primary-light);
+}
+
+.send-btn {
+  background-color: var(--primary-light);
+  color: #fff;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.send-btn:hover {
+  background-color: var(--primary);
+  transform: scale(1.05);
+}

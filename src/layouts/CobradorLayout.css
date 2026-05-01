@@ -1,0 +1,43 @@
+.cobrador-layout {
+  min-height: 100vh;
+  background-color: #f5f7f9; /* Light gray background */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+}
+
+.cobrador-topbar {
+  background-color: #ffffff;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.cobrador-topbar h1 {
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin: 0;
+}
+
+.cobrador-logout {
+  background: transparent;
+  border: none;
+  color: var(--danger-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cobrador-content {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}

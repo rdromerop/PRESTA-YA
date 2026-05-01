@@ -1,0 +1,366 @@
+.pagos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+  position: relative;
+}
+
+.page-header {
+  margin-bottom: 0.5rem;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-card);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-input-wrapper .search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.search-input-wrapper input {
+  width: 100%;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  padding: 0.8rem 1rem 0.8rem 2.8rem;
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.2s;
+  font-size: 1rem;
+}
+
+.search-input-wrapper input:focus {
+  border-color: var(--primary-light);
+}
+
+.pagos-content {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.pagos-table-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.pagos-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pagos-table th, 
+.pagos-table td {
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.pagos-table th {
+  background-color: rgba(255,255,255,0.02);
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.pagos-table td {
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.pagos-table tr {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pagos-table tr:hover td {
+  background-color: rgba(255,255,255,0.05);
+}
+
+/* Star Rating Styles */
+.rating-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.stars-wrapper {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  color: rgba(255,255,255,0.1);
+  fill: rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+}
+
+.rating-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* ★ Negro tenebroso – Cliente malo */
+.rating-1 .star.filled {
+  color: #1a0000;
+  fill: #1a0000;
+  filter: drop-shadow(0 0 5px rgba(180, 0, 0, 0.9)) drop-shadow(0 0 2px #000);
+  animation: terror-star 1.4s ease-in-out infinite alternate;
+}
+.rating-1-text {
+  color: #8b0000;
+  text-shadow: 0 0 6px rgba(180, 0, 0, 0.7);
+  animation: terror-text 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes terror-star {
+  from {
+    filter: drop-shadow(0 0 3px rgba(120, 0, 0, 0.8)) drop-shadow(0 0 1px #000);
+    color: #1a0000; fill: #1a0000;
+  }
+  to {
+    filter: drop-shadow(0 0 10px rgba(220, 0, 0, 1)) drop-shadow(0 0 4px rgba(0,0,0,0.9));
+    color: #3d0000; fill: #3d0000;
+  }
+}
+@keyframes terror-text {
+  from { text-shadow: 0 0 4px rgba(130, 0, 0, 0.6); }
+  to   { text-shadow: 0 0 12px rgba(220, 0, 0, 1), 0 0 20px rgba(180, 0, 0, 0.5); }
+}
+
+/* ★★ Naranja quemado – Alto riesgo */
+.rating-2 .star.filled {
+  color: #d35400;
+  fill: #d35400;
+  filter: drop-shadow(0 0 3px rgba(211, 84, 0, 0.6));
+}
+.rating-2-text { color: #e67e22; }
+
+/* ★★★ Ámbar – Poco potencial */
+.rating-3 .star.filled {
+  color: #d4ac0d;
+  fill: #d4ac0d;
+  filter: drop-shadow(0 0 4px rgba(212, 172, 13, 0.5));
+}
+.rating-3-text { color: #f4d03f; }
+
+/* ★★★★ Verde esmeralda – Buen cliente */
+.rating-4 .star.filled {
+  color: #1e8449;
+  fill: #1e8449;
+  filter: drop-shadow(0 0 4px rgba(30, 132, 73, 0.7));
+}
+.rating-4-text { color: #2ecc71; }
+
+/* ★★★★★ Dorado brillante – Cliente estupendo */
+.rating-5 .star.filled {
+  color: #f0b429;
+  fill: #f0b429;
+  filter: drop-shadow(0 0 6px rgba(240, 180, 41, 0.9));
+  animation: shimmer-star 2s ease-in-out infinite alternate;
+}
+.rating-5-text {
+  color: #f0b429;
+  text-shadow: 0 0 8px rgba(240, 180, 41, 0.6);
+}
+
+@keyframes shimmer-star {
+  from { filter: drop-shadow(0 0 4px rgba(240, 180, 41, 0.7)); }
+  to   { filter: drop-shadow(0 0 9px rgba(255, 220, 80, 1)); }
+}
+
+.client-name {
+  font-weight: 600;
+  color: var(--primary-light);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s;
+}
+
+.pagos-table tr:hover .client-name {
+  text-decoration-color: var(--primary-light);
+}
+
+.amount {
+  font-weight: 700;
+  color: var(--accent-light);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 13, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+.modal-content {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px);
+  animation: slideUpModal 0.3s forwards;
+}
+
+@keyframes slideUpModal {
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+  font-size: 1.4rem;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: var(--danger-light);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.loan-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--bg-main);
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.summary-item h5 {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.summary-item p {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.schedule-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background-color: var(--bg-main);
+}
+
+.schedule-item.pagado {
+  border-left: 4px solid var(--accent-light);
+}
+
+.schedule-item.pendiente {
+  border-left: 4px solid var(--warning-light);
+}
+
+.schedule-item.atrasado {
+  border-left: 4px solid var(--danger-light);
+}
+
+.schedule-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cuota-number {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.cuota-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.cuota-amount {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.pagado { background-color: rgba(65, 179, 113, 0.15); color: var(--accent-light); }
+.status-badge.pendiente { background-color: rgba(209, 161, 54, 0.15); color: var(--warning-light); }
+.status-badge.atrasado { background-color: rgba(214, 74, 74, 0.15); color: var(--danger-light); }

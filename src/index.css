@@ -1,28 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Theme Colors */
-  --bg-main: #0a0f0d;
-  --bg-card: #121b16;
-  --bg-card-hover: #17221c;
+  /* Theme Colors - Professional Fintech Palette */
+  --bg-main: #0f172a; /* Deep Slate Blue */
+  --bg-card: #1e293b;
+  --bg-card-hover: #26334d;
   
-  --primary: #1a3b2b;
-  --primary-light: #244c38;
-  --primary-lighter: #2d5d45;
+  --primary: #1e1b4b; /* Darker Indigo */
+  --primary-light: #312e81; /* Primary Indigo */
+  --primary-lighter: #4338ca;
   
-  --text-main: #e2e8e4;
-  --text-muted: #8e9e95;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
   
-  --accent: #2e8c56; /* Subtle accent green */
-  --accent-light: #41b371;
+  --accent: #059669; /* Vibrant Emerald Green */
+  --accent-light: #10b981;
   
-  --danger: #9c3b3b;
-  --danger-light: #d64a4a;
+  --danger: #9f1239;
+  --danger-light: #e11d48;
   
-  --warning: #a87e27;
-  --warning-light: #d1a136;
+  --warning: #b45309;
+  --warning-light: #f59e0b;
 
-  --border: #1e2d25;
+  --border: #334155;
 
   /* Fonts */
   --font-family: 'Inter', sans-serif;

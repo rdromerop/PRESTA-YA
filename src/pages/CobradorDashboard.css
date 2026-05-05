@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1rem;
+  background-color: var(--bg-main);
+  min-height: 100vh;
 }
 
 .cobrador-filters {
@@ -11,14 +14,14 @@
 }
 
 .cobrador-search, .plazo-filter {
-  background-color: #fff;
-  border: 1px solid #e1e4e8;
-  border-radius: 8px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   padding: 0.7rem 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  box-shadow: var(--shadow-sm);
 }
 
 .cobrador-search {
@@ -30,15 +33,17 @@
   outline: none;
   background: transparent;
   font-size: 0.9rem;
-  color: #444;
+  color: var(--text-main);
   cursor: pointer;
 }
 
 .cobrador-search input {
+  background: transparent;
   border: none;
   outline: none;
   width: 100%;
   font-size: 1rem;
+  color: var(--text-main);
 }
 
 .client-list-mobile {
@@ -48,83 +53,89 @@
 }
 
 .client-card-mobile {
-  background-color: #fff;
-  border: 1px solid #e1e4e8;
-  border-radius: 12px;
-  padding: 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-md);
   transition: all 0.2s ease;
 }
 
 .client-card-mobile.due-today {
-  border-left: 5px solid #28a745;
-  background-color: rgba(40, 167, 69, 0.03);
+  border-left: 4px solid var(--accent-light);
+  background: linear-gradient(to right, rgba(16, 185, 129, 0.05), transparent);
 }
 
 .client-card-mobile.not-due {
-  opacity: 0.8;
-  background-color: #fcfcfc;
-  filter: grayscale(0.2);
+  opacity: 0.7;
 }
 
 .tag-today {
-  background-color: #28a745;
+  background-color: var(--accent-light);
   color: #fff;
   font-size: 0.65rem;
   font-weight: 800;
-  padding: 0.1rem 0.4rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .client-info-mobile h3 {
   font-size: 1.1rem;
-  margin-bottom: 0.2rem;
-  color: #111;
+  margin-bottom: 0.3rem;
+  color: var(--text-main);
 }
 
 .client-info-mobile p {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .btn-cobrar {
-  background-color: var(--primary);
+  background-color: var(--primary-light);
   color: #fff;
   border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-/* Modal Light */
+.btn-cobrar:hover {
+  background-color: var(--primary-lighter);
+}
+
+/* Modal Dark */
 .modal-overlay-light {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.8);
+  backdrop-filter: blur(4px);
   display: flex;
-  align-items: flex-end; /* Bottom sheet effect */
+  align-items: flex-end;
   justify-content: center;
   z-index: 1000;
 }
 
 .modal-content-light {
-  background-color: #fff;
+  background-color: var(--bg-card);
   width: 100%;
-  border-radius: 20px 20px 0 0;
-  padding: 1.5rem;
-  animation: slideUpMobile 0.3s forwards;
+  max-width: 500px;
+  border-radius: 24px 24px 0 0;
+  padding: 2rem;
+  animation: slideUpMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  border: 1px solid var(--border);
+  border-bottom: none;
 }
 
 @keyframes slideUpMobile {
@@ -136,92 +147,98 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .modal-header-light h2 {
-  font-size: 1.2rem;
-  color: #111;
+  font-size: 1.3rem;
+  color: var(--text-main);
 }
 
 .form-group-light {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
 }
 
 .form-group-light label {
-  font-size: 0.9rem;
-  color: #444;
-  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 .input-light {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 1.25rem;
+  font-size: 2rem;
+  font-weight: 700;
   text-align: center;
   outline: none;
+  transition: border-color 0.2s;
 }
 
 .input-light:focus {
-  border-color: var(--primary);
+  border-color: var(--primary-light);
 }
 
 .btn-submit-light {
   width: 100%;
-  background-color: var(--primary);
+  background-color: var(--primary-light);
   color: #fff;
   border: none;
   padding: 1.2rem;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
 
 /* Route Toggle */
 .route-toggle-section {
   display: flex;
-  background-color: #f1f3f5;
+  background-color: var(--bg-card);
   padding: 0.3rem;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 0.5rem;
+  border: 1px solid var(--border);
 }
 
 .toggle-btn {
   flex: 1;
   border: none;
-  padding: 0.7rem;
-  border-radius: 9px;
+  padding: 0.75rem;
+  border-radius: 11px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   background: transparent;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .toggle-btn.active {
-  background-color: #fff;
-  color: var(--primary);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background-color: var(--primary-light);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
 }
 
 /* Recent Payments in Modal */
 .recent-payments-modal {
   margin-top: 2rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border);
   padding-top: 1.5rem;
 }
 
 .recent-payments-modal h3 {
-  font-size: 0.95rem;
-  color: #666;
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -237,22 +254,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.9rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px dashed #eee;
+  font-size: 0.95rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed var(--border);
 }
 
 .modal-payment-item span {
-  color: #888;
+  color: var(--text-muted);
 }
 
 .modal-payment-item strong {
-  color: #28a745;
+  color: var(--accent-light);
 }
 
 .no-payments-text {
   text-align: center;
-  font-size: 0.85rem;
-  color: #999;
+  font-size: 0.9rem;
+  color: var(--text-muted);
   font-style: italic;
+}
+
+.sunday-message {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: var(--bg-card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
 }

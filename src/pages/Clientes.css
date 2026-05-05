@@ -272,3 +272,66 @@ tr:last-child td {
 
 .payment-pagado { background-color: rgba(65, 179, 113, 0.15); color: var(--accent-light); }
 .payment-pendiente { background-color: rgba(209, 161, 54, 0.15); color: var(--warning-light); }
+
+/* Responsive adjustments */
+.back-btn {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--primary-light);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  .clientes-content {
+    grid-template-columns: 300px 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .clientes-content {
+    display: block; /* Stack them but we'll show only one at a time */
+    height: auto;
+  }
+
+  .clientes-list-section {
+    display: block;
+  }
+
+  .clientes-content.showing-detail .clientes-list-section {
+    display: none;
+  }
+
+  .client-detail-section {
+    display: none;
+    padding: 1.5rem;
+  }
+
+  .clientes-content.showing-detail .client-detail-section {
+    display: block;
+  }
+
+  .back-btn {
+    display: flex;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .detail-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .status-badge {
+    align-self: flex-start;
+  }
+}

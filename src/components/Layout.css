@@ -24,11 +24,31 @@
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
-  height: calc(100vh - 70px); /* Subtract topbar height */
+  height: calc(100vh - 70px);
+}
+
+.sidebar-overlay {
+  display: none;
 }
 
 @media (max-width: 768px) {
   .sidebar-open, .sidebar-closed {
     margin-left: 0;
+  }
+  
+  .content-area {
+    padding: 1rem;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+    backdrop-filter: blur(2px);
   }
 }

@@ -13,6 +13,24 @@
   z-index: 90;
 }
 
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 1rem;
+  }
+  .mobile-menu-btn {
+    display: flex;
+  }
+}
+
 .search-bar {
   display: flex;
   align-items: center;

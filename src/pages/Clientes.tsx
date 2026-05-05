@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, User, CreditCard, Phone, Clock, DollarSign, FileText, MessageCircle } from 'lucide-react';
+import { Search, User, CreditCard, Phone, Clock, DollarSign, FileText, MessageCircle, ArrowLeft } from 'lucide-react';
 import { useData, calculateSchedule } from '../context/DataContext';
 import { Cliente, ScheduleItem } from '../types';
 import './Clientes.css';
@@ -74,7 +74,7 @@ const Clientes = () => {
         <p>Busca y administra la información de préstamos y pagos por cliente</p>
       </header>
 
-      <div className="clientes-content">
+      <div className={`clientes-content ${selectedClientId ? 'showing-detail' : ''}`}>
         
         {/* Left: Client List */}
         <div className="clientes-list-section">
@@ -117,6 +117,9 @@ const Clientes = () => {
         <div className="client-detail-section">
           {selectedClient ? (
             <div className="animate-fade-in">
+              <button className="back-btn" onClick={() => setSelectedClientId(null)}>
+                <ArrowLeft size={20} /> Volver a la lista
+              </button>
               <div className="detail-header">
                 <div className="detail-profile">
                   <div className="detail-avatar">

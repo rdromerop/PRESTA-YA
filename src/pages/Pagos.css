@@ -364,3 +364,34 @@
 .status-badge.pagado { background-color: rgba(65, 179, 113, 0.15); color: var(--accent-light); }
 .status-badge.pendiente { background-color: rgba(209, 161, 54, 0.15); color: var(--warning-light); }
 .status-badge.atrasado { background-color: rgba(214, 74, 74, 0.15); color: var(--danger-light); }
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+
+  .loan-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modal-content {
+    width: 95%;
+    max-height: 85vh;
+  }
+
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .pagos-table-container {
+    overflow-x: auto;
+  }
+
+  .pagos-table th, .pagos-table td {
+    padding: 1rem 0.75rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+}

@@ -1,9 +1,9 @@
-import { Bell, LogOut } from 'lucide-react';
+import { Bell, LogOut, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import './Topbar.css';
 
-const Topbar = () => {
+const Topbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const { logout } = useData();
   const navigate = useNavigate();
 
@@ -14,7 +14,9 @@ const Topbar = () => {
 
   return (
     <header className="topbar">
-      
+      <button className="mobile-menu-btn" onClick={toggleSidebar}>
+        <Menu size={24} />
+      </button>
       <div className="topbar-actions">
         <button className="icon-btn notification-btn" aria-label="Notifications">
           <Bell size={20} />

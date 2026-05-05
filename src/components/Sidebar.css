@@ -19,6 +19,22 @@
   width: 80px;
 }
 
+@media (max-width: 768px) {
+  .sidebar {
+    width: 260px !important;
+    left: -260px;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar.closed {
+    left: -260px;
+  }
+}
+
 .sidebar-header {
   height: 70px;
   display: flex;

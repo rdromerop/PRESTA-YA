@@ -14,7 +14,7 @@ const Clientes = () => {
     client.cedula.includes(searchTerm)
   );
 
-  const selectedClientRaw = loansDb.find((c: Cliente) => c.id === selectedClientId);
+  const selectedClientRaw = loansDb.find((c: Cliente) => String(c.id) === selectedClientId);
   
   // Computed state for the selected client
   let selectedClient: any = null;

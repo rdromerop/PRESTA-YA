@@ -46,15 +46,30 @@ const Reportes = () => {
 
   const dataRecaudacion = useMemo(() => {
     const map: Record<string, number> = {};
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split('T')[0];
+
     loansDb.forEach(client => {
       client.pagos_realizados.forEach(pago => {
-        map[pago.fecha] = (map[pago.fecha] || 0) + pago.monto;
+        if (pago.fecha >= thirtyDaysAgoStr) {
+          map[pago.fecha] = (map[pago.fecha] || 0) + pago.monto;
+        }
       });
     });
-    return Object.keys(map).sort().map(fecha => ({
-      fecha,
-      recogido: map[fecha]
-    }));
+
+    const result = [];
+    let current = new Date(thirtyDaysAgo);
+    const today = new Date();
+    while (current <= today) {
+      const dateStr = current.toISOString().split('T')[0];
+      result.push({
+        fecha: dateStr.split('-').slice(1).join('/'),
+        recogido: map[dateStr] || 0
+      });
+      current.setDate(current.getDate() + 1);
+    }
+    return result;
   }, [loansDb]);
 
   const handleExportExcel = () => {
@@ -89,7 +104,7 @@ const Reportes = () => {
         {/* 1. Line Chart (Full Width) - Dinero Recogido */}
         <div className="chart-card chart-full-width">
           <div className="chart-header">
-            <h3><TrendingUp size={20} className="icon" /> Dinero Recaudado por Día (Últimos 7 días)</h3>
+            <h3><TrendingUp size={20} className="icon" /> Dinero Recaudado (Últimos 30 días)</h3>
           </div>
           <div className="chart-wrapper">
             <ResponsiveContainer width="100%" height="100%">

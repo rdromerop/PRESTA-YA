@@ -1,16 +1,22 @@
 import React, { useState, useMemo } from 'react';
-import { User, MapPin, Phone, DollarSign, Percent, Calendar, CheckCircle2, Info } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { User, CreditCard, MapPin, Phone, DollarSign, Percent, Calendar, CheckCircle2, Info } from 'lucide-react';
+import { useData } from '../context/DataContext';
 import './NuevoPrestamo.css';
 
 const NuevoPrestamo = () => {
+  const { addClient } = useData();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nombre: '',
+    cedula: '',
     telefono: '',
     direccion: '',
     monto: '',
     plazo: 'diaria',
     interes: '20',
-    cuotas: '40'
+    cuotas: '40',
+    dia_cobro: '1'
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -83,8 +89,23 @@ const NuevoPrestamo = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Datos del préstamo:', formData);
-    alert('Préstamo registrado simulado con éxito');
+    const newClient = {
+      cliente: formData.nombre,
+      cedula: formData.cedula,
+      telefono: formData.telefono,
+      direccion: formData.direccion,
+      prestamo: {
+        monto: parseFloat(formData.monto),
+        interes: parseFloat(formData.interes),
+        cuotas_totales: parseInt(formData.cuotas),
+        plazo: formData.plazo as any,
+        fecha_inicio: new Date().toISOString().split('T')[0],
+        dia_cobro: formData.plazo === 'semanal' ? parseInt(formData.dia_cobro) : undefined
+      }
+    };
+    addClient(newClient);
+    alert('Préstamo registrado con éxito');
+    navigate('/admin/clientes');
   };
 
   return (
@@ -110,6 +131,24 @@ const NuevoPrestamo = () => {
                   className="form-control" 
                   placeholder="Ej. Juan Pérez"
                   value={formData.nombre}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
+            </div>
+
+            {/* Cédula del Cliente */}
+            <div className="form-group full-width">
+              <label htmlFor="cedula">Cédula de Identidad</label>
+              <div className="input-with-icon">
+                <CreditCard size={18} className="input-icon" />
+                <input 
+                  type="text" 
+                  id="cedula" 
+                  name="cedula" 
+                  className="form-control" 
+                  placeholder="Ej. 1.234.567-8"
+                  value={formData.cedula}
                   onChange={handleChange}
                   required 
                 />
@@ -233,6 +272,31 @@ const NuevoPrestamo = () => {
                 </select>
               </div>
             </div>
+
+            {/* Selección de día para préstamos semanales */}
+            {formData.plazo === 'semanal' && (
+              <div className="form-group full-width animate-fade-in">
+                <label htmlFor="dia_cobro">Día de la Semana para Cobro</label>
+                <div className="input-with-icon">
+                  <Calendar size={18} className="input-icon" />
+                  <select 
+                    id="dia_cobro" 
+                    name="dia_cobro" 
+                    className="form-control"
+                    value={formData.dia_cobro}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="1">Lunes</option>
+                    <option value="2">Martes</option>
+                    <option value="3">Miércoles</option>
+                    <option value="4">Jueves</option>
+                    <option value="5">Viernes</option>
+                    <option value="6">Sábado</option>
+                  </select>
+                </div>
+              </div>
+            )}
 
           </div>
 

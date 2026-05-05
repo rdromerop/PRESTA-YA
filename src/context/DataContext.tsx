@@ -81,7 +81,12 @@ export const calculateSchedule = (loanData: Cliente): ScheduleItem[] => {
   const today = new Date().toISOString().split('T')[0];
 
   for (let i = 1; i <= prestamo.cuotas_totales; i++) {
-    if (prestamo.plazo === 'diaria') currentDate = addTime(currentDate, 1, 'dias');
+    if (prestamo.plazo === 'diaria') {
+      currentDate = addTime(currentDate, 1, 'dias');
+      if (new Date(currentDate + 'T12:00:00').getDay() === 0) {
+        currentDate = addTime(currentDate, 1, 'dias');
+      }
+    }
     else if (prestamo.plazo === 'semanal') currentDate = addTime(currentDate, 7, 'dias');
     else if (prestamo.plazo === 'quincenal') currentDate = addTime(currentDate, 15, 'dias');
     else if (prestamo.plazo === 'mensual') currentDate = addTime(currentDate, 1, 'meses');
@@ -133,8 +138,18 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  const addClient = (newClientData: Omit<Cliente, 'id' | 'calificacion' | 'pagos_realizados'>) => {
+    const newClient: Cliente = {
+      ...newClientData,
+      id: Date.now(),
+      calificacion: 5,
+      pagos_realizados: []
+    };
+    setLoansDb(prev => [...prev, newClient]);
+  };
+
   return (
-    <DataContext.Provider value={{ loansDb, setLoansDb, currentUser, login, logout, registerPayment }}>
+    <DataContext.Provider value={{ loansDb, setLoansDb, currentUser, login, logout, registerPayment, addClient }}>
       {children}
     </DataContext.Provider>
   );

@@ -4,6 +4,7 @@ export interface Prestamo {
   cuotas_totales: number;
   plazo: 'diaria' | 'semanal' | 'quincenal' | 'mensual';
   fecha_inicio: string;
+  dia_cobro?: number; 
 }
 
 export interface Pago {
@@ -40,4 +41,5 @@ export interface DataContextType {
   login: (role: 'admin' | 'cobrador') => void;
   logout: () => void;
   registerPayment: (clienteId: number | string, amount: number | string) => void;
+  addClient: (client: Omit<Cliente, 'id' | 'calificacion' | 'pagos_realizados'>) => void;
 }

@@ -1,17 +1,41 @@
 import React, { useState } from 'react';
-import { Search, DollarSign, X } from 'lucide-react';
-import { useData } from '../context/DataContext';
+import { Search, DollarSign, X, Filter, Calendar, History } from 'lucide-react';
+import { useData, calculateSchedule } from '../context/DataContext';
 import './CobradorDashboard.css';
 
 const CobradorDashboard = () => {
   const { loansDb, registerPayment } = useData();
   const [searchTerm, setSearchTerm] = useState('');
+  const [plazoFilter, setPlazoFilter] = useState<string>('todos');
+  const [showRouteOnly, setShowRouteOnly] = useState(true);
   const [selectedClient, setSelectedClient] = useState<any>(null);
   const [amount, setAmount] = useState('');
 
-  const filteredClients = loansDb.filter(c => 
-    c.cliente.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const todayDate = new Date();
+  const todayStr = todayDate.toISOString().split('T')[0];
+  const todayDay = todayDate.getDay();
+
+  const filteredClients = loansDb.filter(c => {
+    const matchesSearch = c.cliente.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPlazo = plazoFilter === 'todos' || c.prestamo.plazo === plazoFilter;
+    
+    if (showRouteOnly) {
+      if (c.prestamo.plazo === 'diaria') return matchesSearch && matchesPlazo;
+      if (c.prestamo.plazo === 'semanal') {
+        return matchesSearch && matchesPlazo && c.prestamo.dia_cobro === todayDay;
+      }
+      const schedule = calculateSchedule(c);
+      const dueToday = schedule.some(s => s.fecha === todayStr && s.estado !== 'Pagado');
+      return matchesSearch && matchesPlazo && dueToday;
+    }
+
+    return matchesSearch && matchesPlazo;
+  });
+
+  const isDueToday = (client: any) => {
+    const schedule = calculateSchedule(client);
+    return schedule.some(s => s.fecha === todayStr && s.estado !== 'Pagado');
+  };
 
   const handleOpenPayment = (client: any) => {
     setSelectedClient(client);
@@ -29,28 +53,71 @@ const CobradorDashboard = () => {
 
   return (
     <div className="cobrador-dash">
-      <div className="cobrador-search">
-        <Search size={18} color="#999" />
-        <input 
-          type="text" 
-          placeholder="Buscar cliente..." 
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+      <div className="cobrador-filters">
+        <div className="cobrador-search">
+          <Search size={18} color="#999" />
+          <input 
+            type="text" 
+            placeholder="Buscar cliente..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        
+        <div className="plazo-filter">
+          <Filter size={18} color="#999" />
+          <select value={plazoFilter} onChange={(e) => setPlazoFilter(e.target.value)}>
+            <option value="todos">Todos los plazos</option>
+            <option value="diaria">Diario</option>
+            <option value="semanal">Semanal</option>
+            <option value="quincenal">Quincenal</option>
+            <option value="mensual">Mensual</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="route-toggle-section">
+        <button 
+          className={`toggle-btn ${showRouteOnly ? 'active' : ''}`}
+          onClick={() => setShowRouteOnly(true)}
+        >
+          Mi Ruta (Hoy)
+        </button>
+        <button 
+          className={`toggle-btn ${!showRouteOnly ? 'active' : ''}`}
+          onClick={() => setShowRouteOnly(false)}
+        >
+          Todos los Clientes
+        </button>
       </div>
 
       <div className="client-list-mobile">
-        {filteredClients.map(client => (
-          <div key={client.id} className="client-card-mobile">
-            <div className="client-info-mobile">
-              <h3>{client.cliente}</h3>
-              <p>C.I: {client.cedula}</p>
-            </div>
-            <button className="btn-cobrar" onClick={() => handleOpenPayment(client)}>
-              <DollarSign size={16} /> Cobrar
-            </button>
+        {todayDay === 0 && showRouteOnly ? (
+          <div className="sunday-message" style={{ textAlign: 'center', padding: '3rem 1rem', color: '#888' }}>
+            <Calendar size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
+            <h3 style={{ color: '#555' }}>Hoy es Domingo</h3>
+            <p style={{ fontSize: '0.9rem' }}>Los domingos no se realizan cobros según la configuración del sistema.</p>
           </div>
-        ))}
+        ) : filteredClients.map(client => {
+          const dueToday = isDueToday(client);
+          return (
+            <div 
+              key={client.id} 
+              className={`client-card-mobile ${dueToday ? 'due-today' : 'not-due'}`}
+            >
+              <div className="client-info-mobile">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <h3>{client.cliente}</h3>
+                  {dueToday && <span className="tag-today">Hoy</span>}
+                </div>
+                <p>C.I: {client.cedula} • <span style={{textTransform:'capitalize'}}>{client.prestamo.plazo}</span></p>
+              </div>
+              <button className="btn-cobrar" onClick={() => handleOpenPayment(client)}>
+                <DollarSign size={16} /> Cobrar
+              </button>
+            </div>
+          );
+        })}
         {filteredClients.length === 0 && (
           <p style={{textAlign: 'center', marginTop: '2rem', color: '#666'}}>No se encontraron clientes.</p>
         )}
@@ -83,6 +150,22 @@ const CobradorDashboard = () => {
                 Registrar Pago
               </button>
             </form>
+
+            <div className="recent-payments-modal">
+              <h3><History size={16} /> Historial Reciente</h3>
+              {selectedClient.pagos_realizados.length > 0 ? (
+                <div className="modal-payments-list">
+                  {[...selectedClient.pagos_realizados].reverse().slice(0, 5).map((pago: any) => (
+                    <div key={pago.id} className="modal-payment-item">
+                      <span>{pago.fecha}</span>
+                      <strong>${pago.monto.toFixed(2)}</strong>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="no-payments-text">No hay pagos registrados aún.</p>
+              )}
+            </div>
           </div>
         </div>
       )}
